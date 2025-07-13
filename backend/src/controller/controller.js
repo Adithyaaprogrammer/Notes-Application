@@ -1,18 +1,41 @@
-export function getNotes(req, res) {
-    res.status(200).send('500 notes application');
+import Note from '../models/Note.js'; // Importing the default export
+export async function getAllNotes(req, res) {
+    try {
+        const notes = await Note.find(); // Assuming Note is a Mongoose model
+        res.status(200).json(notes);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to retrieve notes' });
+    }
 }
 
-export function createNote(req, res) {
-    const message = 'post Note created';
-    res.status(201).json({ message });
+export async function createNote(req, res) {
+    try {
+        const {title, content} = req.body;
+        const newNote = new Note({title, content});
+        await newNote.save();
+        res.status(201).json(newNote);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to create note' });
+    }
 }
 
-export function updateNote(req, res) {
-    const message = `Note with id ${req.params.id} updated`;
-    res.status(200).json({ message });
+export async function updateNote(req, res) {
+    try {
+        const updatedNote = await Note.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedNote) {
+            return res.status(404).json({ error: 'Note not found' });
+        }
+        res.status(200).json(updatedNote);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to update note' });
+    }
 }
 
 export function deleteNote(req, res) {
+    const deletedNote = Note.findByIdAndDelete(req.params.id);
+    if (!deletedNote) {
+        return res.status(404).json({ error: 'Note not found' });
+    }
     const message = `Note with id ${req.params.id} deleted`;
     res.status(200).json({ message });
 }
