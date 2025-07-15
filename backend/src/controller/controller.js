@@ -1,10 +1,24 @@
 import Note from '../models/Note.js'; // Importing the default export
-export async function getAllNotes(req, res) {
+export async function getAllNotes(req,res) {
     try {
-        const notes = await Note.find(); // Assuming Note is a Mongoose model
+        const notes = await Note.find().sort({ createdAt: -1 }); // Assuming Note is a Mongoose model
+        if (!notes || notes.length === 0) {
+            return res.status(404).json({ error: 'No notes found' });
+        }
         res.status(200).json(notes);
     } catch (error) {
         res.status(500).json({ error: 'Failed to retrieve notes' });
+    }
+}
+export async function getNotesById(req,res){
+    try{
+        const notes = await Note.findById(req.params.id);
+        if (!notes) {
+            return res.status(404).json({ error: 'Note not found' });
+        }
+        res.status(200).json(notes);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to retrieve note' });
     }
 }
 
