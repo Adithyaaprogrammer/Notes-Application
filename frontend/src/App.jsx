@@ -6,7 +6,7 @@ import Notedetailpage from './pages/Notedetailpage'
 import { toast } from 'react-hot-toast'
 const App = () => {
   return (
-    <div>
+    <div data-theme="dark">
 <Routes>
         <Route path="" element={<Homepage />} />
         <Route path="/create" element={<Createpage />} />
