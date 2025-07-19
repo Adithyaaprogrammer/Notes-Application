@@ -3,10 +3,14 @@ import routes from './routes/routes.js';
 import {connectDB} from './config/db.js';
 // import {redis, ratelimiter } from './config/upstash.js';
 import ratelimite from './middleware/ratelimiter.js';
+import cors from 'cors';
 const app = express();
 const PORT = process.env.PORT ;
 app.use(express.json()); // Middleware to parse JSON bodies
+app.use(cors());
 app.use(ratelimite);
+
+
 app.use((req, res, next) => {
   console.log(`${req.method} request for '${req.url}'`);
   
