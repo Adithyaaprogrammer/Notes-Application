@@ -45,11 +45,15 @@ export async function updateNote(req, res) {
     }
 }
 
-export function deleteNote(req, res) {
-    const deletedNote = Note.findByIdAndDelete(req.params.id);
-    if (!deletedNote) {
-        return res.status(404).json({ error: 'Note not found' });
+export async function deleteNote(req, res) {
+    try {
+        const deletedNote = await Note.findByIdAndDelete(req.params.id);
+        if (!deletedNote) {
+            return res.status(404).json({ error: 'Note not found' });
+        }
+        const message = `Note with id ${req.params.id} deleted`;
+        res.status(200).json({ message });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to delete note' });
     }
-    const message = `Note with id ${req.params.id} deleted`;
-    res.status(200).json({ message });
 }

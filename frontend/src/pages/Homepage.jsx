@@ -33,7 +33,7 @@ const Homepage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-900 text-white">
       <NavBar />
       {isratelimited && <RateLimit />}
       <div className="max-w-6xl mx-auto px-4 py-8">
@@ -42,13 +42,13 @@ const Homepage = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {notes.map(note => (
-              <div key={note._id} className="bg-blue-500 p-4 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold mb-2 text-black">{note.title}</h2>
-                <p className="text-black">{note.content}</p>
+              <div key={note._id} className="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 border border-gray-700">
+                <h2 className="text-xl font-semibold mb-2 text-blue-400">{note.title}</h2>
+                <p className="text-gray-300">{note.content}</p>
                 <div className="mt-4 flex justify-between">
                   <a 
                     href={`/note/${note._id}`} 
-                    className="text-white bg-blue-700 hover:bg-blue-800 px-3 py-1 rounded"
+                    className="text-blue-400 hover:text-blue-300 border border-blue-500 hover:bg-blue-900 px-4 py-1.5 rounded-md transition-all duration-200 text-sm font-medium"
                   >
                     View
                   </a>
@@ -63,7 +63,7 @@ const Homepage = () => {
                         toast.error('Failed to delete note');
                       }
                     }}
-                    className="text-white bg-red-600 hover:bg-red-700 px-3 py-1 rounded"
+                    className="text-red-400 hover:text-red-300 border border-red-500 hover:bg-red-900 px-4 py-1.5 rounded-md transition-all duration-200 text-sm font-medium"
                   >
                     Delete
                   </button>
