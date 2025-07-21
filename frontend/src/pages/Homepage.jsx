@@ -2,7 +2,7 @@ import React from 'react'
 import { useState , useEffect} from 'react'
 import NavBar from '../components/NavBar'
 import RateLimit from '../components/RateLimit'
-import axios from 'axios'
+import axiosInstance from '../lib/axios'
 import toast from 'react-hot-toast'
 const Homepage = () => {
   const [isratelimited, setratelimited] = useState(false);
@@ -12,7 +12,7 @@ const Homepage = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/notes/');
+        const response = await axiosInstance.get('/notes/');
         setNotes(response.data);
         setratelimited(false);
       } catch (error) {
@@ -55,7 +55,7 @@ const Homepage = () => {
                   <button 
                     onClick={async () => {
                       try {
-                        await axios.delete(`http://localhost:3000/api/notes/${note._id}`);
+                        await axiosInstance.delete(`/notes/${note._id}`);
                         setNotes(notes.filter(n => n._id !== note._id));
                         toast.success('Note deleted successfully');
                       } catch (error) {

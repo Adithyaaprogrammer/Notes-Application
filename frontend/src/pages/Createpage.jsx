@@ -1,33 +1,47 @@
 import React from 'react'
 import { useState } from 'react'
+import { Link, useNavigate } from 'react-router'
 import NavBar from '../components/NavBar'
-import axios from 'axios'
+import axiosInstance from '../lib/axios'
 import toast from 'react-hot-toast'
 
 const Createpage = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:3000/api/notes/create', { title, content });
+      const response = await axiosInstance.post('/notes/create', { title, content });
       toast.success('Note created successfully');
-      // Optionally redirect or clear form
+      navigate('/'); // Redirect to home page
     } catch (error) {
       console.error('Error creating note:', error);
-      toast.error('Failed to create note. Please try again later.');
+      if(error.response.status === 429){
+        toast.error('Too many requests. Please try again later.');
+      }
+      else{
+        toast.error('Failed to create note. Please try again later.');
+      }
     } finally {
       setLoading(false);
     }
   };
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      <NavBar />
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
+          <div className="mb-6">
+            <Link 
+              to="/" 
+              className="inline-flex items-center text-blue-400 hover:text-blue-300 border border-blue-500 hover:bg-blue-900 px-4 py-1.5 rounded-md transition-all duration-200 text-sm font-medium"
+            >
+              ← Back to Home
+            </Link>
+          </div>
           <h1 className="text-3xl font-bold mb-8 text-center text-blue-400">Create New Note</h1>
           <form onSubmit={handleSubmit} className="bg-gray-800 p-8 rounded-lg shadow-lg border border-gray-700">
             <div className="mb-6">
